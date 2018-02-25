@@ -7,7 +7,7 @@ require "redis"
  #<Twitter::Tweet id=967741961552658432>,
  #<Twitter::Tweet id=967519658046836736>]
 
-module AutoAaorn
+module AutoAaron
 	extend self
   REDIS = Redis.new(url: ENV["REDIS_URL"] || "redis://localhost")
   DEFAULT_SINCE = 967815970805964800
