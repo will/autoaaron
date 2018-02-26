@@ -3,23 +3,19 @@ require "dotenv/load"
 require "twitter"
 require "redis"
 
- #<Twitter::Tweet id=967815970805964800>,
- #<Twitter::Tweet id=967741961552658432>,
- #<Twitter::Tweet id=967519658046836736>]
-
 module AutoAaron
-	extend self
+  extend self
   REDIS = Redis.new(url: ENV["REDIS_URL"] || "redis://localhost")
   DEFAULT_SINCE = 967815970805964800
   KEY = "aaron"
   EMOJI = %w[🤡 🙄 🙃 🤣 😹 ❣️]
 
-	CLIENT = Twitter::REST::Client.new do |config|
-		config.consumer_key        = ENV["CONSUMER_KEY"]
-		config.consumer_secret     = ENV["CONSUMER_SECRET"]
-		config.access_token        = ENV["ACCESS_TOKEN"]
-		config.access_token_secret = ENV["ACCESS_SECRET"]
-	end
+  CLIENT = Twitter::REST::Client.new do |config|
+    config.consumer_key        = ENV["CONSUMER_KEY"]
+    config.consumer_secret     = ENV["CONSUMER_SECRET"]
+    config.access_token        = ENV["ACCESS_TOKEN"]
+    config.access_token_secret = ENV["ACCESS_SECRET"]
+  end
 
   def aaron!
     since = get_since
@@ -31,16 +27,16 @@ module AutoAaron
   end
 
   def get_tweets(since)
-		CLIENT.user_timeline(
+    CLIENT.user_timeline(
       "tenderlove",
       since_id:        since,
-			include_rts:     false,
-			count:           1000,
-			exclude_replies: true,
-			trim_user:       true,
-		).reject { |t|
-			t.full_text =~ /@/
-		}
+      include_rts:     false,
+      count:           1000,
+      exclude_replies: true,
+      trim_user:       true,
+    ).reject { |t|
+      t.full_text =~ /@/
+    }
   end
 
   def get_since
@@ -52,6 +48,7 @@ module AutoAaron
   end
 
   def reply_to(t)
+    return unless rand > 0.5
     r = response_for(t)
     puts %Q(response=#{r.inspect} id=#{t.id} lang=#{t.lang} text=#{t.full_text.inspect})
     if ENV["LIVE"]
