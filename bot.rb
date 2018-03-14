@@ -48,7 +48,7 @@ module AutoAaron
   end
 
   def reply_to(t)
-    return unless rand > 0.95 || t.lang == "ja"
+    return unless rand > 0.95
     r = response_for(t)
     puts %Q(response=#{r.inspect} id=#{t.id} lang=#{t.lang} text=#{t.full_text.inspect})
     if ENV["LIVE"]
